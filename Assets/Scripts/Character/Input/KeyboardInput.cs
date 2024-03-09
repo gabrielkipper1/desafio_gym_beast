@@ -6,6 +6,6 @@ public class KeyboardInput : CharacterInput
 {
     public override Vector2 movementInput()
     {
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 }
