@@ -7,7 +7,6 @@ using UnityEngine;
 public class CharacterController : Character
 {
     public CharacterInput input;
-    public CharacterAnimatorController animatorController;
     public CharacterStack stack;
 
     void Start()
@@ -35,23 +34,28 @@ public class CharacterController : Character
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger detected");
         StackableObject stackable = other.gameObject.GetComponent<StackableObject>();
         if (stackable != null)
         {
-            Debug.Log("Stackable object collided");
             stack.AddToStack(stackable);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision detected");
         StackableObject stackable = collision.gameObject.GetComponent<StackableObject>();
         if (stackable != null)
         {
-            Debug.Log("Stackable object collided");
             stack.AddToStack(stackable);
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Character character = collision.gameObject.GetComponent<Character>();
+            if (character != null)
+            {
+                this.HitOtherPlayer(character);
+            }
         }
     }
 

@@ -13,6 +13,11 @@ public abstract class Character : MonoBehaviour
     [SerializeField]
     private new CapsuleCollider collider;
 
+    [SerializeField]
+    protected CharacterAnimatorController animatorController;
+
+    [SerializeField]
+    protected RagdollController ragdollController;
 
     public void Initialize()
     {
@@ -24,6 +29,16 @@ public abstract class Character : MonoBehaviour
         if (collider == null)
         {
             collider = GetComponent<CapsuleCollider>();
+        }
+
+        if(animatorController == null)
+        {
+            animatorController = GetComponent<CharacterAnimatorController>();
+        }
+
+        if(ragdollController == null)
+        {
+            ragdollController = GetComponent<RagdollController>();
         }
     }
 
@@ -40,6 +55,17 @@ public abstract class Character : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(facePoint - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 180 * Time.deltaTime);
         }
+    }
+
+    public virtual void TakeHit(Character other)
+    {
+        ragdollController.EnableRagdoll(other, 20);
+    }
+
+    public virtual void HitOtherPlayer(Character character)
+    {
+        animatorController.Attack();
+        character.TakeHit(this);
     }
 
     public abstract Vector2 getMovementDirection();
