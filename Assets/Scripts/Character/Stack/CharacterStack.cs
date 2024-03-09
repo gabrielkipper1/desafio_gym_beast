@@ -10,6 +10,8 @@ public class CharacterStack : MonoBehaviour
     public Transform stackRoot;
     public List<Transform> stack;
 
+    public int StackCount => stack.Count;
+
     private void Start()
     {
         stack = new List<Transform>();
@@ -20,31 +22,30 @@ public class CharacterStack : MonoBehaviour
         updatePositions();
     }
 
-    public int stackCount()
-    {
-        return stack.Count;
-    }
-
     public void AddToStack(StackableObject stackableObject)
     {
+        if (stackableObject.pickedUp)
+        {
+            return;
+        }
+
         Vector3 position = getPreviousStackPosition(stack.Count) + stackableObject.offset;
         stack.Add(stackableObject.transform);
         stackableObject.transform.position = position;
+        stackableObject.pickedUp = true;
     }
 
     public void RemoveFromStack()
     {
         if (stack.Count > 0)
         {
+            Transform stackTransform = stack[stack.Count - 1];
             stack.RemoveAt(stack.Count - 1);
-            if(removeFromStackAnimation != null)
-            {
-                removeFromStackAnimation.Animate();
-            }
+            Animations.AnimatePositionAndScale(stackTransform.gameObject, new Vector3(transform.position.x, -1, transform.position.z), Vector3.zero, 0.5f);   
         }
     }
 
-    public void updatePositions()
+    private void updatePositions()
     {
         for (int i = 0; i < stack.Count; i++)
         {
@@ -53,7 +54,7 @@ public class CharacterStack : MonoBehaviour
         }
     }
 
-    public Vector3 getPreviousStackPosition(int index)
+    private Vector3 getPreviousStackPosition(int index)
     {
         if (index > 0)
         {
