@@ -19,33 +19,54 @@ public class RagdollController : MonoBehaviour
     {
         limbsColliders = viewRoot.GetComponentsInChildren<Collider>();
         limbsRigidbodies = viewRoot.GetComponentsInChildren<Rigidbody>();
-        ToggleRagdoll(false);
+        DisableRagdoll();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ToggleRagdoll(!isEnable);
+            //EnableRagdoll(transform.position, 10);
         }
     }
 
-    public void ToggleRagdoll(bool active)
+    public void DisableRagdoll()
     {
-        isEnable = active;
+        isEnable = true;
         for (int i = 0; i < limbsColliders.Length; i++)
         {
-            limbsColliders[i].enabled = active;
+            limbsColliders[i].enabled = false;
         }
 
         for (int i = 0; i < limbsRigidbodies.Length; i++)
         {
-            limbsRigidbodies[i].isKinematic = !active;
+            limbsRigidbodies[i].isKinematic = true;
         }
 
-        characterCollider.isKinematic = active;
-        characterRigidbody.enabled = !active;
-        characterAnimator.enabled = !active;
+        characterCollider.isKinematic = false;
+        characterRigidbody.enabled = true;
+        characterAnimator.enabled = true;
+    }
+
+    public void EnableRagdoll(Character puncher, float force)
+    {
+        isEnable = true;
+        for (int i = 0; i < limbsColliders.Length; i++)
+        {
+            limbsColliders[i].enabled = true;
+        }
+
+        for (int i = 0; i < limbsRigidbodies.Length; i++)
+        {
+            limbsRigidbodies[i].isKinematic = false;
+            limbsRigidbodies[i].AddForce(puncher.transform.forward.normalized * force, ForceMode.Acceleration);
+            limbsRigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Continuous;
+            limbsRigidbodies[i].sleepThreshold = 0.0f;
+        }
+
+        characterCollider.isKinematic = true;
+        characterRigidbody.enabled = false;
+        characterAnimator.enabled = false;
     }
 
 }
