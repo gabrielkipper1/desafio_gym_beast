@@ -12,4 +12,9 @@ public class CharacterAnimatorController : MonoBehaviour
     {
         animator.SetFloat("movement", character.getMovementDirection().sqrMagnitude);
     }
+
+    public void Attack()
+    {
+        animator.SetTrigger("attack");
+    }
 }
