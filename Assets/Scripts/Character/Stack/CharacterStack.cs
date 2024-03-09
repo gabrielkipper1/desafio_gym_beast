@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CharacterStack : MonoBehaviour
 {
+    public IAnimation removeFromStackAnimation;
+    public IAnimation addToStackAnimation;
+
     public Transform stackRoot;
     public List<Transform> stack;
 
@@ -17,11 +20,28 @@ public class CharacterStack : MonoBehaviour
         updatePositions();
     }
 
+    public int stackCount()
+    {
+        return stack.Count;
+    }
+
     public void AddToStack(StackableObject stackableObject)
     {
         Vector3 position = getPreviousStackPosition(stack.Count) + stackableObject.offset;
         stack.Add(stackableObject.transform);
         stackableObject.transform.position = position;
+    }
+
+    public void RemoveFromStack()
+    {
+        if (stack.Count > 0)
+        {
+            stack.RemoveAt(stack.Count - 1);
+            if(removeFromStackAnimation != null)
+            {
+                removeFromStackAnimation.Animate();
+            }
+        }
     }
 
     public void updatePositions()
@@ -43,10 +63,5 @@ public class CharacterStack : MonoBehaviour
         {
             return stackRoot.position;
         }
-    }
-
-    public void RemoveFromStack(StackableObject stackableObject)
-    {
-        stack.Remove(stackableObject.transform);
     }
 }
