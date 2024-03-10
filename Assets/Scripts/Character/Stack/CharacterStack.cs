@@ -10,6 +10,7 @@ public class CharacterStack : MonoBehaviour
     public Transform stackRoot;
     public List<Transform> stack;
 
+    public int maxStackCount;
     public int StackCount => stack.Count;
 
     private void Start()
@@ -19,17 +20,22 @@ public class CharacterStack : MonoBehaviour
 
     private void Update()
     {
-        updatePositions();
+        UpdatePositions();
+    }
+
+    public void IncreaseStack(int amount)
+    {
+        maxStackCount += amount;
     }
 
     public void AddToStack(StackableObject stackableObject)
     {
-        if (stackableObject.pickedUp)
+        if (stackableObject.pickedUp || stack.Count >= maxStackCount)
         {
             return;
         }
 
-        Vector3 position = getPreviousStackPosition(stack.Count) + stackableObject.offset;
+        Vector3 position = GetPreviousStackPosition(stack.Count) + stackableObject.offset;
         stack.Add(stackableObject.transform);
         stackableObject.transform.position = position;
         stackableObject.pickedUp = true;
@@ -41,20 +47,20 @@ public class CharacterStack : MonoBehaviour
         {
             Transform stackTransform = stack[stack.Count - 1];
             stack.RemoveAt(stack.Count - 1);
-            Animations.AnimatePositionAndScale(stackTransform.gameObject, new Vector3(transform.position.x, -1, transform.position.z), Vector3.zero, 0.5f);   
+            Animations.AnimatePositionAndScale(stackTransform.gameObject, new Vector3(transform.position.x, -1, transform.position.z), Vector3.zero, 0.5f);
         }
     }
 
-    private void updatePositions()
+    private void UpdatePositions()
     {
         for (int i = 0; i < stack.Count; i++)
         {
-            stack[i].position = getPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset;
+            stack[i].position = GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset;
             stack[i].rotation = stackRoot.rotation;
         }
     }
 
-    private Vector3 getPreviousStackPosition(int index)
+    private Vector3 GetPreviousStackPosition(int index)
     {
         if (index > 0)
         {

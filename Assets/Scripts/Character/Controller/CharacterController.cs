@@ -64,5 +64,10 @@ public class CharacterController : Character
         return input.movementInput();
     }
 
+    public void IncreaseStack(int amount)
+    {
+        stack.IncreaseStack(amount);
+    }
+
 
 }
