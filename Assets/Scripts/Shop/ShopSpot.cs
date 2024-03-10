@@ -6,9 +6,20 @@ public class ShopSpot : MonoBehaviour
 {
     private Coroutine timerRoutine;
     private CharacterController controller;
-    public float timer;
-    public float timeLeft;
-    public float timeBetweenIteractions;
+    private float timeLeft;
+
+    [SerializeField]
+    private Shop shop;
+
+    [SerializeField]
+    private float timer;
+
+    [SerializeField]
+    private float timeBetweenIteractions;
+
+    public CharacterController playerIn => controller;
+    public bool isPlayerIn => controller != null;
+    public float percentage => timeLeft / timer;
 
     void OnTriggerEnter(Collider other)
     {
@@ -42,14 +53,15 @@ public class ShopSpot : MonoBehaviour
     {
         timeLeft = timer;
 
-        while(timeLeft > 0)
+        while (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
-        while(controller.stack.StackCount > 0)
+        while (controller.stack.StackCount > 0)
         {
+            shop.PayAmount(1, controller);
             controller.stack.RemoveFromStack();
             yield return new WaitForSeconds(timeBetweenIteractions);
         }
