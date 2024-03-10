@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterStack : MonoBehaviour
 {
+    public UnityEvent<int> OnStackUpdated = new UnityEvent<int>();
     public IAnimation removeFromStackAnimation;
     public IAnimation addToStackAnimation;
 
