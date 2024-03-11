@@ -59,10 +59,9 @@ public class ShopSpot : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        while (controller.stack.StackCount > 0)
+        while (playerIn != null)
         {
-            shop.PayAmount(1, controller);
-            controller.stack.RemoveFromStack();
+            shop.Pay(controller);
             yield return new WaitForSeconds(timeBetweenIteractions);
         }
     }

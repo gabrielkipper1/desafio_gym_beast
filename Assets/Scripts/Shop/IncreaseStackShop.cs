@@ -4,16 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "IncreaseStackShop", menuName = "Shop/IncreaseStackShop")]
-public class IncreaseStackShop : Shop
+public class IncreaseStackShop : StarBasedShop
 {
-    protected override void ApplyEffect(Character buyer)
+    protected override void ApplyEffect(CharacterController buyer)
     {
-        CharacterController characterController = buyer.GetComponent<CharacterController>();
-        characterController.IncreaseStack(1);
-    }
-
-    public override int GetLevelCost()
-    {
-        return (int)(initialCost + (costMultiplier * level * 1.5f));
+        Debug.Log("Applying effect, increasing stack");
+        buyer.IncreaseStack(1);
     }
 }

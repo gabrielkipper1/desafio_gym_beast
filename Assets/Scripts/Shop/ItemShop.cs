@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ItemShop", menuName = "Shop/ItemShop")]
-public class ItemShop : Shop
+public class ItemShop
 {
-    protected override void ApplyEffect(Character buyer)
-    {
-
-    }
 }
