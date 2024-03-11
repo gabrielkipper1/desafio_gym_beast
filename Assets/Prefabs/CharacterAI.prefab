@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4718417769625546097}
   - component: {fileID: 7774264443015293780}
   - component: {fileID: 3133650202468517434}
-  - component: {fileID: 6197163415678145557}
   - component: {fileID: 4517078674253788505}
   - component: {fileID: 59581641451312627}
   m_Layer: 0
@@ -106,20 +105,6 @@ MonoBehaviour:
   characterRigidbody: {fileID: 4718417769625546097}
   limbsColliders: []
   limbsRigidbodies: []
---- !u!114 &6197163415678145557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139170667534640303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cd99c55efdaccbff89e0a772c32c1b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character: {fileID: 4517078674253788505}
-  animator: {fileID: 7071709463908057640}
 --- !u!114 &4517078674253788505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,11 +119,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   rigidbody: {fileID: 7774264443015293780}
+  animator: {fileID: 0}
   collider: {fileID: 4718417769625546097}
-  animatorController: {fileID: 6197163415678145557}
   ragdollController: {fileID: 3133650202468517434}
   agent: {fileID: 59581641451312627}
   target: {fileID: 0}
+  stackableBehaviour: {fileID: 0}
 --- !u!195 &59581641451312627
 NavMeshAgent:
   m_ObjectHideFlags: 0
