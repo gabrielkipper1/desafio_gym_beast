@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class AICharacter : Character
 {
+    public GameObject stackableReplacement;
     public NavMeshAgent agent;
     public Transform target;
-
-    [SerializeField]
-    private StackableObject stackableBehaviour;
 
     private void Start()
     {
@@ -18,7 +17,7 @@ public class AICharacter : Character
 
     public void Update()
     {
-        animatorController.Animate();        
+        animatorController.Animate();
     }
 
     public override Vector2 getMovementDirection()
@@ -28,14 +27,22 @@ public class AICharacter : Character
 
     public override void TakeHit(Character other)
     {
+        agent.enabled = false;
         base.TakeHit(other);
-        StartCoroutine(SetAsPickable());
+        InstantiateStackableObject(other);
     }
 
-    IEnumerator SetAsPickable()
+    private void InstantiateStackableObject(Character other)
     {
-        yield return new WaitForSeconds(1f);
-        stackableBehaviour.enabled = true;
-    }
+        CharacterController characterController = other.transform.GetComponent<CharacterController>();
+        if (characterController == null)
+        {
+            return;
+        }
 
+        GameObject stackable = Instantiate(stackableReplacement, transform.position, Quaternion.identity);
+        StackableObject stackableBehaviour = stackable.GetComponent<StackableObject>();
+        characterController.StackObject(stackableBehaviour);
+
+    }
 }
