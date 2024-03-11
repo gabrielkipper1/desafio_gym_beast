@@ -12,6 +12,7 @@ public class AICharacter : Character
 
     private void Start()
     {
+        base.Initialize();
         agent.SetDestination(target.position);
     }
 
@@ -33,9 +34,7 @@ public class AICharacter : Character
 
     IEnumerator SetAsPickable()
     {
-        Debug.Log("iniciando coroutine");
         yield return new WaitForSeconds(1f);
-        Debug.Log("set to true");
         stackableBehaviour.enabled = true;
     }
 

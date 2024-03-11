@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterAnimatorController : MonoBehaviour
+public class CharacterAnimatorController
 {
-    public Character character;
-    public Animator animator;
+    public CharacterAnimatorController(Character character, Animator animator)
+    {
+        this.character = character;
+        this.animator = animator;
+    }
+    private Character character;
+    private Animator animator;
 
     public void Animate()
     {

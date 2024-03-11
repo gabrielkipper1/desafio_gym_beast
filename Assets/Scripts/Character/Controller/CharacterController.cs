@@ -1,23 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterController : Character
 {
+    //STACK EVENTS
+    public UnityEvent<StackableObject> OnStackIncreased = new UnityEvent<StackableObject>();
+    public UnityEvent<int>  OnStackDecreased = new UnityEvent<int>();
+    public UnityEvent<int> OnStackUpdated = new UnityEvent<int>();
+    public UnityEvent <int> OnMaxStrackIncreased = new UnityEvent<int>();
+  
+    //START EVENTS
+    public UnityEvent<int> OnStarsAdded = new UnityEvent<int>();
+    public UnityEvent<int> OnStarsRemoved = new UnityEvent<int>();
+    public UnityEvent<int> OnStarsUpdated = new UnityEvent<int>();
+
     public CharacterInput input;
     public CharacterStack stack;
+    public CharacterStatus status;
+    public Transform stackRoot;
 
     void Start()
     {
-        this.input = new KeyboardInput();
         base.Initialize();
+        this.input = new KeyboardInput();
+        this.stack = new CharacterStack(this, this.stackRoot);
+        this.status.RegisterEvents(this);
     }
 
     void Update()
     {
         animatorController.Animate();
+        this.stack.Update();
     }
 
     void FixedUpdate()
@@ -37,18 +55,12 @@ public class CharacterController : Character
         StackableObject stackable = other.gameObject.GetComponent<StackableObject>();
         if (stackable != null)
         {
-            stack.AddToStack(stackable);
+            StackObject(stackable);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        StackableObject stackable = collision.gameObject.GetComponent<StackableObject>();
-        if (stackable != null)
-        {
-            stack.AddToStack(stackable);
-        }
-
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Character character = collision.gameObject.GetComponent<Character>();
@@ -64,10 +76,41 @@ public class CharacterController : Character
         return input.movementInput();
     }
 
+    public void StackObject(StackableObject stackableObject)
+    {
+        this.OnStackIncreased.Invoke(stackableObject);
+        this.OnStackUpdated.Invoke(this.status.stackedAmount);
+    }
+
     public void IncreaseStack(int amount)
     {
-        stack.IncreaseStack(amount);
+        this.OnMaxStrackIncreased.Invoke(amount);
+        this.OnStackUpdated.Invoke(this.status.stackedAmount);
+    }
+
+    public void RemoveFromStack(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            this.OnStackDecreased.Invoke(1);
+            this.OnStackUpdated.Invoke(this.status.stackedAmount);
+        }
+    }
+
+    public void AddStars(int amount)
+    {
+        if(amount > 0){
+            this.OnStarsAdded.Invoke(amount);
+        }
+        else if(amount < 0){
+            this.OnStarsRemoved.Invoke(amount);
+        }
+
+        this.OnStarsUpdated.Invoke(this.status.stars);
     }
 
 
+    void OnDisable(){
+        this.status.UnregisterEvents(this);
+    }
 }

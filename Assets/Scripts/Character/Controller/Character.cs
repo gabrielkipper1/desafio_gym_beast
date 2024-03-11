@@ -11,6 +11,9 @@ public abstract class Character : MonoBehaviour
     private new Rigidbody rigidbody;
 
     [SerializeField]
+    private Animator animator;
+
+    [SerializeField]
     private new CapsuleCollider collider;
 
     [SerializeField]
@@ -31,15 +34,12 @@ public abstract class Character : MonoBehaviour
             collider = GetComponent<CapsuleCollider>();
         }
 
-        if(animatorController == null)
-        {
-            animatorController = GetComponent<CharacterAnimatorController>();
-        }
-
         if(ragdollController == null)
         {
             ragdollController = GetComponent<RagdollController>();
         }
+
+        this.animatorController = new CharacterAnimatorController(this, animator);
     }
 
     public void Move(Vector3 direction)

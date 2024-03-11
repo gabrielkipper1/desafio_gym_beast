@@ -1,41 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CharacterStack : MonoBehaviour
+public class CharacterStack
 {
-    public UnityEvent<int> OnStackUpdated = new UnityEvent<int>();
-    public IAnimation removeFromStackAnimation;
-    public IAnimation addToStackAnimation;
+    public CharacterStack(CharacterController characterController, Transform stackRoot)
+    {
+        this.character = characterController;
+        this.stackRoot = stackRoot;
+        this.stack = new List<Transform>();
 
+        characterController.OnStackIncreased.AddListener(AddToStack);
+        characterController.OnStackDecreased.AddListener(RemoveFromStack);
+        // characterController.OnMaxStrackIncreased.AddListener(IncreaseStack);
+    }
+
+    private CharacterController character;
     public Transform stackRoot;
     public List<Transform> stack;
 
-    public int maxStackCount;
-    public int StackCount => stack.Count;
-
-    private void Start()
-    {
-        stack = new List<Transform>();
-    }
-
-    private void Update()
+    public void Update()
     {
         UpdatePositions();
     }
 
-    public void IncreaseStack(int amount)
-    {
-        maxStackCount += amount;
-    }
+    // public void IncreaseStack(int amount)
+    // {
+    //     maxStackCount += amount;
+    // }
 
     public void AddToStack(StackableObject stackableObject)
     {
-        if (stackableObject.pickedUp || stack.Count >= maxStackCount)
+        if (stackableObject.pickedUp || stack.Count >= character.status.maxStack)
         {
+            Debug.Log("Stack is full");
             return;
         }
+        Debug.Log("Adding to stack on character stack");
 
         Vector3 position = GetPreviousStackPosition(stack.Count) + stackableObject.offset;
         stack.Add(stackableObject.transform);
@@ -43,22 +46,24 @@ public class CharacterStack : MonoBehaviour
         stackableObject.pickedUp = true;
     }
 
-    public void RemoveFromStack()
+    public void RemoveFromStack(int amount)
     {
-        if (stack.Count > 0)
-        {
-            Transform stackTransform = stack[stack.Count - 1];
+       int removedAmount = amount;
+       while(removedAmount > 0){
+            if(stack.Count == 0){
+                return;
+            }
+            
             stack.RemoveAt(stack.Count - 1);
-            Animations.AnimatePositionAndScale(stackTransform.gameObject, new Vector3(transform.position.x, -1, transform.position.z), Vector3.zero, 0.5f);
-        }
+            removedAmount--;
+       }
     }
 
     private void UpdatePositions()
     {
         for (int i = 0; i < stack.Count; i++)
         {
-            stack[i].position = GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset;
-            stack[i].rotation = stackRoot.rotation;
+            stack[i].SetPositionAndRotation(GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset, stackRoot.rotation);
         }
     }
 
