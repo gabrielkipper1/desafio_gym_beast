@@ -10,26 +10,21 @@ public class CharacterStack
     {
         this.character = characterController;
         this.stackRoot = stackRoot;
-        this.stack = new List<Transform>();
+        this.stack = new List<StackableObject>();
 
         characterController.OnStackIncreased.AddListener(AddToStack);
         characterController.OnStackDecreased.AddListener(RemoveFromStack);
-        // characterController.OnMaxStrackIncreased.AddListener(IncreaseStack);
     }
 
+    private float inertialForce = 15f;
     private CharacterController character;
     public Transform stackRoot;
-    public List<Transform> stack;
+    public List<StackableObject> stack;
 
     public void Update()
     {
         UpdatePositions();
     }
-
-    // public void IncreaseStack(int amount)
-    // {
-    //     maxStackCount += amount;
-    // }
 
     public void AddToStack(StackableObject stackableObject)
     {
@@ -38,32 +33,44 @@ public class CharacterStack
             Debug.Log("Stack is full");
             return;
         }
-        Debug.Log("Adding to stack on character stack");
 
         Vector3 position = GetPreviousStackPosition(stack.Count) + stackableObject.offset;
-        stack.Add(stackableObject.transform);
-        stackableObject.transform.position = position;
-        stackableObject.pickedUp = true;
+        stackableObject.root.transform.position = position;
+
+        stack.Add(stackableObject);
+        stackableObject.MarkAsPickedUp();
     }
 
     public void RemoveFromStack(int amount)
     {
-       int removedAmount = amount;
-       while(removedAmount > 0){
-            if(stack.Count == 0){
+        int removedAmount = amount;
+        while (removedAmount > 0)
+        {
+            if (stack.Count == 0)
+            {
                 return;
             }
-            
+            StackableObject removed = stack[stack.Count - 1];
             stack.RemoveAt(stack.Count - 1);
+            removed.DropAndDestroy();
             removedAmount--;
-       }
+        }
     }
 
     private void UpdatePositions()
     {
         for (int i = 0; i < stack.Count; i++)
         {
-            stack[i].SetPositionAndRotation(GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset, stackRoot.rotation);
+            Vector3 targetPosition = GetPreviousStackPosition(i) + stack[i].offset;
+            Quaternion targetRotation = stackRoot.rotation;
+
+            stack[i].transform.SetPositionAndRotation(
+                Vector3.Lerp(stack[i].root.transform.position, targetPosition, inertialForce * Time.deltaTime),
+                Quaternion.Slerp(stack[i].root.transform.rotation, targetRotation, inertialForce * Time.deltaTime));
+            // stack[i].transform.SetPositionAndRotation(
+            //     GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset,
+            //     stackRoot.rotation
+            // );
         }
     }
 
@@ -71,7 +78,7 @@ public class CharacterStack
     {
         if (index > 0)
         {
-            return stack[index - 1].position;
+            return stack[index - 1].transform.position;
         }
         else
         {
