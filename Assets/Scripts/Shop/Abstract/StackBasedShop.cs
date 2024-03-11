@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StackBasedShop : Shop
@@ -15,7 +13,8 @@ public abstract class StackBasedShop : Shop
         int amountLeft = GetLevelCost() - amountPaid;
         int amountToPay = Math.Min(buyer.status.stackedAmount, amountLeft);
 
-        if(amountToPay > 0){
+        if (amountToPay > 0)
+        {
             amountPaid += amountToPay;
             buyer.RemoveFromStack(amountToPay);
             Debug.Log("Paying stacks, amount paid: " + amountPaid);
@@ -26,13 +25,5 @@ public abstract class StackBasedShop : Shop
             Debug.Log("Buying from stacks");
             Buy(buyer);
         }
-    }
-
-    protected override void Buy(CharacterController buyer)
-    {
-        Debug.Log("Buying stacks");
-        amountPaid -= GetLevelCost();
-        level++;
-        ApplyEffect(buyer);
     }
 }

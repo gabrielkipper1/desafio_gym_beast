@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89d646d9e6f88dc82bf398012577fcb8, type: 3}
   m_Name: IncreaseStackShop
   m_EditorClassIdentifier: 
-  level: 2
-  cost: 0
-  amountPaid: 0
+  level: 1
+  costMultiplier: 1
   initialCost: 1
-  costMultiplier: 2
+  initialReward: 0
+  rewardMultiplier: 0
+  amountPaid: 0

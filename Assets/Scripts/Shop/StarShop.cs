@@ -8,6 +8,12 @@ public class StarShop : StackBasedShop
 {
     protected override void ApplyEffect(CharacterController buyer)
     {
-        buyer.AddStars(1);
+        Debug.Log("Applying effect, adding stars");
+        buyer.AddStars(GetRewardAmount());
+    }
+
+    public override int GetRewardAmount()
+    {
+        return (int)(level * 1.3f);
     }
 }

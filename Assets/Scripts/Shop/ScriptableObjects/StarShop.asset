@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3996a5dadae944e2493b0c2ca11c3adb, type: 3}
   m_Name: StarShop
   m_EditorClassIdentifier: 
-  level: 0
-  cost: 1
-  amountPaid: 0
-  initialCost: 2
+  onLevelUp:
+    m_PersistentCalls:
+      m_Calls: []
+  level: 1
   costMultiplier: 1
+  initialCost: 0
+  initialReward: 1
+  rewardMultiplier: 2
+  amountPaid: 0

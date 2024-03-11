@@ -9,6 +9,11 @@ public class IncreaseStackShop : StarBasedShop
     protected override void ApplyEffect(CharacterController buyer)
     {
         Debug.Log("Applying effect, increasing stack");
-        buyer.IncreaseStack(1);
+        buyer.IncreaseStack(GetRewardAmount());
+    }
+
+    public override int GetRewardAmount()
+    {
+        return (int)(level * 1.3f);
     }
 }
