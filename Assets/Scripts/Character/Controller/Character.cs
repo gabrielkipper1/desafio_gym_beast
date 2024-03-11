@@ -34,7 +34,7 @@ public abstract class Character : MonoBehaviour
             collider = GetComponent<CapsuleCollider>();
         }
 
-        if(ragdollController == null)
+        if (ragdollController == null)
         {
             ragdollController = GetComponent<RagdollController>();
         }
@@ -59,7 +59,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void TakeHit(Character other)
     {
-        ragdollController.EnableRagdoll(other, 20);
+        ragdollController.EnableRagdoll(other, 600);
     }
 
     public virtual void HitOtherPlayer(Character character)

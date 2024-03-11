@@ -59,7 +59,7 @@ public class RagdollController : MonoBehaviour
         for (int i = 0; i < limbsRigidbodies.Length; i++)
         {
             limbsRigidbodies[i].isKinematic = false;
-            limbsRigidbodies[i].AddForce(puncher.transform.forward.normalized * force, ForceMode.Acceleration);
+            limbsRigidbodies[i].AddForce(new Vector3(puncher.transform.forward.normalized.x, 0.8f, puncher.transform.forward.normalized.z) * 25, ForceMode.Impulse);
             limbsRigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Continuous;
             limbsRigidbodies[i].sleepThreshold = 0.0f;
         }
