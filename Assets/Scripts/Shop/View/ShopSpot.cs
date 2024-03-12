@@ -2,31 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopSpot : MonoBehaviour
+public abstract class ShopSpot : MonoBehaviour
 {
-    private Coroutine timerRoutine;
-    private CharacterController controller;
-    private float timeLeft;
+    protected Coroutine timerRoutine;
+    protected CharacterController characterController;
+    protected float timeLeft;
 
     [SerializeField]
-    private Shop shop;
+    protected Shop shop;
 
     [SerializeField]
     private float timer;
 
     [SerializeField]
-    private float timeBetweenIteractions;
+    protected float timeBetweenIteractions;
 
-    public CharacterController playerIn => controller;
-    public bool isPlayerIn => controller != null;
+    public CharacterController playerIn => characterController;
+    public bool isPlayerIn => characterController != null;
     public float percentage => timeLeft / timer;
+
+    protected abstract IEnumerator onTimerEnded();
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             StartCounter();
-            controller = other.gameObject.GetComponent<CharacterController>();
+            characterController = other.gameObject.GetComponent<CharacterController>();
         }
     }
 
@@ -35,7 +37,7 @@ public class ShopSpot : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EndCounter();
-            controller = null;
+            characterController = null;
         }
     }
 
@@ -61,8 +63,8 @@ public class ShopSpot : MonoBehaviour
 
         while (playerIn != null)
         {
-            shop.Pay(controller);
-            yield return new WaitForSeconds(timeBetweenIteractions);
+            // shop.Pay(controller);
+            yield return onTimerEnded();
         }
     }
 }
