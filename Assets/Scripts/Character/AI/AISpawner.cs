@@ -6,7 +6,7 @@ public class AISpawner : MonoBehaviour
 {
     public GameObject aiPrefab;
     public List<Transform> spawnPoints = new List<Transform>();
-    public List<GameObject> spawnedAIS = new List<GameObject>();
+    public List<Character> spawnedAIS = new List<Character>();
 
     public int maxAIs = 10;
     public float spawnRate = 2;
@@ -37,16 +37,25 @@ public class AISpawner : MonoBehaviour
             return;
         }
 
-        int randomIndex = Random.Range(0, spawnPoints.Count);
-        Transform spawnPoint = spawnPoints[randomIndex];
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
         GameObject gameObject = Instantiate(aiPrefab, spawnPoint.position, Quaternion.identity);
         AICharacter aiController = gameObject.GetComponent<AICharacter>();
+
         aiController.onDeath.AddListener(OnAIDeath);
-        spawnedAIS.Add(gameObject);
+        spawnedAIS.Add(aiController);
     }
 
     private void OnAIDeath(Character character)
     {
-        spawnedAIS.Remove(character.gameObject);
+        character.onDeath.RemoveListener(OnAIDeath);
+        spawnedAIS.Remove(character);
+    }
+
+    private void OnDisable()
+    {
+        for (int i = 0; i < spawnedAIS.Count; i++)
+        {
+            spawnedAIS[i].onDeath.RemoveListener(OnAIDeath);
+        }
     }
 }
