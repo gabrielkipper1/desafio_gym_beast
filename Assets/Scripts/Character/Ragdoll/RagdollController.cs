@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class RagdollController : MonoBehaviour
 {
+    public GameObject destroyVFX;
     private bool isEnable;
     public Transform viewRoot;
 
     public Animator characterAnimator;
-    public Rigidbody characterCollider;
-    public CapsuleCollider characterRigidbody;
+    public Rigidbody CharacterRigidbody;
+    public CapsuleCollider CharacterCollider;
 
     public Collider[] limbsColliders;
     public Rigidbody[] limbsRigidbodies;
@@ -22,11 +23,12 @@ public class RagdollController : MonoBehaviour
         DisableRagdoll();
     }
 
-    void Update()
+    void SetDestroyTimer()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        Destroy(gameObject, 5f);
+        if (destroyVFX != null)
         {
-            //EnableRagdoll(transform.position, 10);
+            GameObject vfx = Instantiate(destroyVFX, transform.position, Quaternion.identity);
         }
     }
 
@@ -43,8 +45,8 @@ public class RagdollController : MonoBehaviour
             limbsRigidbodies[i].isKinematic = true;
         }
 
-        characterCollider.isKinematic = false;
-        characterRigidbody.enabled = true;
+        CharacterRigidbody.isKinematic = false;
+        CharacterCollider.enabled = true;
         characterAnimator.enabled = true;
     }
 
@@ -59,14 +61,16 @@ public class RagdollController : MonoBehaviour
         for (int i = 0; i < limbsRigidbodies.Length; i++)
         {
             limbsRigidbodies[i].isKinematic = false;
-            limbsRigidbodies[i].AddForce(new Vector3(puncher.transform.forward.normalized.x, 0.8f, puncher.transform.forward.normalized.z) * 25, ForceMode.Impulse);
-            limbsRigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Continuous;
-            limbsRigidbodies[i].sleepThreshold = 0.0f;
+            limbsRigidbodies[i].drag = 1;
+            limbsRigidbodies[i].angularDrag = 2f;
+            Vector3 inverseDirection = (limbsRigidbodies[i].transform.position - puncher.transform.position).normalized;
+            limbsRigidbodies[i].velocity = new Vector3(inverseDirection.x * force, force * 0.3f, inverseDirection.z * force);
         }
 
-        characterCollider.isKinematic = true;
-        characterRigidbody.enabled = false;
+        CharacterRigidbody.isKinematic = true;
+        CharacterCollider.enabled = false;
         characterAnimator.enabled = false;
+        SetDestroyTimer();
     }
 
 }
