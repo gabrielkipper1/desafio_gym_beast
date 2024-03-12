@@ -15,9 +15,9 @@ MonoBehaviour:
   onLevelUp:
     m_PersistentCalls:
       m_Calls: []
-  level: 11
+  level: 1
   costMultiplier: 1
   initialCost: 1
-  initialReward: 0
-  rewardMultiplier: 0
+  initialReward: 1
+  rewardMultiplier: 1
   amountPaid: 0

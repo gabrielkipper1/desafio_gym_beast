@@ -17,7 +17,7 @@ MonoBehaviour:
       m_Calls: []
   level: 1
   costMultiplier: 1
-  initialCost: 0
+  initialCost: 1
   initialReward: 1
   rewardMultiplier: 2
-  amountPaid: 0
+  amountPaid: 1

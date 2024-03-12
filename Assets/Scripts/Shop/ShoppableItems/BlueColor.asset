@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ef73573ba6c7fb38cf387e2dc33925, type: 3}
   m_Name: BlueColor
   m_EditorClassIdentifier: 
-  itemName: Blue
+  OnItemPurchased:
+    m_PersistentCalls:
+      m_Calls: []
+  OnItemEquipped:
+    m_PersistentCalls:
+      m_Calls: []
   itemSprite: {fileID: 21300000, guid: f98e51efca2a4c849b487c5d49cfd55d, type: 3}
+  itemName: Blue
   itemPrice: 5
   isPurchased: 0
   material: {fileID: 2100000, guid: f7fc211f4e7add7899b9396e87cf9486, type: 2}

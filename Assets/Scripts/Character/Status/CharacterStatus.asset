@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fdd39ae4a865423fa05f48bcf4dcc94, type: 3}
   m_Name: CharacterStatus
   m_EditorClassIdentifier: 
-  maxStack: 2
-  starts: 0
+  <stackedAmount>k__BackingField: 0
+  <maxStack>k__BackingField: 5
+  <stars>k__BackingField: 0
