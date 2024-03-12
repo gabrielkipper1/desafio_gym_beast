@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Character : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public abstract class Character : MonoBehaviour
 
     [SerializeField]
     protected RagdollController ragdollController;
+
+    public UnityEvent<Character> onDeath = new UnityEvent<Character>();
 
     public void Initialize()
     {
@@ -59,7 +62,9 @@ public abstract class Character : MonoBehaviour
 
     public virtual void TakeHit(Character other)
     {
-        ragdollController.EnableRagdoll(other, 600);
+
+        ragdollController.EnableRagdoll(other, 30);
+        onDeath.Invoke(this);
     }
 
     public virtual void HitOtherPlayer(Character character)

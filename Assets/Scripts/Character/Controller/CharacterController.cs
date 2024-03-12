@@ -10,24 +10,32 @@ public class CharacterController : Character
 {
     //STACK EVENTS
     public UnityEvent<StackableObject> OnStackIncreased = new UnityEvent<StackableObject>();
-    public UnityEvent<int>  OnStackDecreased = new UnityEvent<int>();
+    public UnityEvent<int> OnStackDecreased = new UnityEvent<int>();
     public UnityEvent<int> OnStackUpdated = new UnityEvent<int>();
-    public UnityEvent <int> OnMaxStrackIncreased = new UnityEvent<int>();
-  
+    public UnityEvent<int> OnMaxStrackIncreased = new UnityEvent<int>();
+
     //START EVENTS
     public UnityEvent<int> OnStarsAdded = new UnityEvent<int>();
     public UnityEvent<int> OnStarsRemoved = new UnityEvent<int>();
     public UnityEvent<int> OnStarsUpdated = new UnityEvent<int>();
 
-    public CharacterInput input;
-    public CharacterStack stack;
     public CharacterStatus status;
-    public Transform stackRoot;
+
+    [SerializeField]
+    private CharacterInput input;
+
+    [SerializeField]
+    private CharacterStack stack;
+
+    [SerializeField]
+    private Transform stackRoot;
+
+    [SerializeField]
+    private SkinnedMeshRenderer meshRenderer;
 
     void Start()
     {
         base.Initialize();
-        this.input = new KeyboardInput();
         this.stack = new CharacterStack(this, this.stackRoot);
         this.status.RegisterEvents(this);
     }
@@ -99,18 +107,25 @@ public class CharacterController : Character
 
     public void AddStars(int amount)
     {
-        if(amount > 0){
+        if (amount > 0)
+        {
             this.OnStarsAdded.Invoke(amount);
         }
-        else if(amount < 0){
+        else if (amount < 0)
+        {
             this.OnStarsRemoved.Invoke(amount);
         }
 
         this.OnStarsUpdated.Invoke(this.status.stars);
     }
 
+    public void SetMaterial(Material material)
+    {
+        this.meshRenderer.material = material;
+    }
 
-    void OnDisable(){
+    void OnDisable()
+    {
         this.status.UnregisterEvents(this);
     }
 }
