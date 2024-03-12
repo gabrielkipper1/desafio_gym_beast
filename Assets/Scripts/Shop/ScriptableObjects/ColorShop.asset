@@ -15,6 +15,8 @@ MonoBehaviour:
   items:
   - {fileID: 11400000, guid: 3e023c3437371d3c8a86df0001ad17b5, type: 2}
   - {fileID: 11400000, guid: 2f350f965c7f82a5a9d1f34ad2970daa, type: 2}
+  - {fileID: 11400000, guid: 2f350f965c7f82a5a9d1f34ad2970daa, type: 2}
+  - {fileID: 11400000, guid: 2f350f965c7f82a5a9d1f34ad2970daa, type: 2}
   OnItemPurchased:
     m_PersistentCalls:
       m_Calls: []

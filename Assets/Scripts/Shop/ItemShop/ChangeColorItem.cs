@@ -14,6 +14,7 @@ public class ChangeColorItem : ShoppableItem
         {
             buyer.AddStars(-itemPrice);
             isPurchased = true;
+            OnItemPurchased.Invoke(this);
         }
     }
 
