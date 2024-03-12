@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class VirtualJoystickInput : MonoBehaviour
+public class VirtualJoystickInput : CharacterInput
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public DynamicJoystick joystick;
 
-    // Update is called once per frame
-    void Update()
+    public override Vector2 movementInput()
     {
-        
+        return joystick.Direction;
     }
 }
