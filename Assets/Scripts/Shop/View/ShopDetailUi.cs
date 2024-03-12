@@ -13,7 +13,7 @@ public class ShopDetailUi : MonoBehaviour
     void Update()
     {
         requiredPayment.text = (shop.GetLevelCost() - shop.amountPaid).ToString();
-        rewardAmount.text = shop.GetRewardAmount().ToString();
+        rewardAmount.text = "+" + shop.GetRewardAmount().ToString();
     }
 
 }
