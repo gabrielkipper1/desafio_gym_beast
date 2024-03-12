@@ -50,6 +50,7 @@ public class CharacterStack
             {
                 return;
             }
+
             StackableObject removed = stack[stack.Count - 1];
             stack.RemoveAt(stack.Count - 1);
             removed.DropAndDestroy();
@@ -67,10 +68,7 @@ public class CharacterStack
             stack[i].transform.SetPositionAndRotation(
                 Vector3.Lerp(stack[i].root.transform.position, targetPosition, inertialForce * Time.deltaTime),
                 Quaternion.Slerp(stack[i].root.transform.rotation, targetRotation, inertialForce * Time.deltaTime));
-            // stack[i].transform.SetPositionAndRotation(
-            //     GetPreviousStackPosition(i) + stack[i].GetComponent<StackableObject>().offset,
-            //     stackRoot.rotation
-            // );
+
         }
     }
 
