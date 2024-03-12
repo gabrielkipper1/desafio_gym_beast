@@ -13,7 +13,7 @@ public class ShopDelayUI : MonoBehaviour
     {
         if (shop.isPlayerIn)
         {
-            progressImage.fillAmount = shop.percentage;
+            progressImage.fillAmount = 1 - shop.percentage;
         }
         else
         {
