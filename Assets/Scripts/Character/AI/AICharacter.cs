@@ -5,14 +5,22 @@ using UnityEngine.Events;
 
 public class AICharacter : Character
 {
+    private NavigationController navigationController;
     public GameObject stackableReplacement;
     public NavMeshAgent agent;
     public Transform target;
 
+    public int minWalkTime = 2;
+    public int maxWalkTime = 10;
+    public int walkingTime;
+
+    private Coroutine walkCoroutine;
+
     private void Start()
     {
+        navigationController = FindFirstObjectByType<NavigationController>();
         base.Initialize();
-        agent.SetDestination(target.position);
+        walkCoroutine = StartCoroutine(WalkBehaviour());
     }
 
     public void Update()
@@ -27,6 +35,7 @@ public class AICharacter : Character
 
     public override void TakeHit(Character other)
     {
+        StopCoroutine(walkCoroutine);
         agent.enabled = false;
         base.TakeHit(other);
         InstantiateStackableObject(other);
@@ -44,5 +53,14 @@ public class AICharacter : Character
         StackableObject stackableBehaviour = stackable.GetComponent<StackableObject>();
         characterController.StackObject(stackableBehaviour);
 
+    }
+
+    private IEnumerator WalkBehaviour()
+    {
+        while (true)
+        {
+            agent.SetDestination(navigationController.GetRandomPoint());
+            yield return new WaitForSeconds(Random.Range(minWalkTime, maxWalkTime));
+        }
     }
 }
